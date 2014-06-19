@@ -1,0 +1,30 @@
+apply plugin: 'scala'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.7
+version = '0.1'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'uber-mayhem-application', 'Implementation-Version': version, 'Main-Class': 'Application'
+    }
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    compile project(':core')
+    compile project(':util')
+    compile 'org.slf4j:slf4j-api:1.7.5'
+    compile "org.scala-lang:scala-library:2.10.4"
+    compile "org.scala-lang:scala-compiler:2.10.4"
+    testCompile "junit:junit:4.11"
+}
+
+task run(type: JavaExec, dependsOn: classes) {
+    main = 'Application'
+    classpath sourceSets.main.runtimeClasspath
+    classpath configurations.runtime
+}

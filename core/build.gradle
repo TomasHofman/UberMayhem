@@ -1,0 +1,23 @@
+apply plugin: 'scala'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.7
+version = '0.1'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'uber-mayhem-core', 'Implementation-Version': version
+    }
+}
+
+repositories{
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies{
+    compile 'org.slf4j:slf4j-api:1.7.5'
+    compile "org.scala-lang:scala-library:2.10.4"
+    compile "org.scala-lang:scala-compiler:2.10.4"
+    compile project(':util')
+    testCompile "junit:junit:4.11"
+}

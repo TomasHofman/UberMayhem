@@ -1,0 +1,37 @@
+apply plugin: 'scala'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    runtime 'org.slf4j:slf4j-api:1.7.5'
+    runtime "org.scala-lang:scala-library:2.10.4"
+    runtime "org.scala-lang:scala-compiler:2.10.4"
+}
+
+task createExecutable(dependsOn: [assemble, 'copyLibs']) << {
+    File explodedDist = mkdir("$buildDir/distribution")
+    subprojects.each { project ->
+        project.tasks.withType(Jar).each { archiveTask ->
+            copy {
+                from archiveTask.archivePath
+                into explodedDist
+            }
+        }
+    }
+
+    copy {
+        from "$projectDir/scripts/run"
+        into "$buildDir/distribution"
+        fileMode 0755
+    }
+}
+
+task copyLibs(type: Copy) {
+    File explodedDist = mkdir("$buildDir/distribution")
+    into "$buildDir/distribution/libs"
+    from configurations.runtime
+}
